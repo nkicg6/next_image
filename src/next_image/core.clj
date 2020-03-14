@@ -1,6 +1,5 @@
-(ns next_image.core
-  (:require [seesaw.core :as sc]
-            [clojure.java.io :as io]))
+(ns next-image.core
+  (:require [seesaw.core :as sc]))
 
 ;; left off on line 182 of https://gist.github.com/daveray/1441520 where it starts to get useful 
 (sc/native!)
@@ -8,30 +7,25 @@
 
 (def next-image-state
   "holds all state for app"
-  (atom {:todo-files "" :done-files ""}))
+  (atom {:todo-files nil
+         :done-files nil
+         :files-remaining nil
+         :files-done nil}))
 
-(defn update-state-field!
+(defn update-todo-done-field!
+  "updates todo adn done lists. Also updates metadata like file lengths"
   [state-atom kw thing]
-  (swap! state-atom assoc kw thing))
-
-(defn get-files
-  [dir endswith]
-  "Selects files in a dir ending with endswith. Removes files classified as hidden by java file io api"
-  (->> dir
-       io/file
-       file-seq
-       (filter #(.isFile %))
-       (filter #(complement (.isHidden %)))
-       (map #(.getAbsolutePath %))
-       (filter #(.endsWith % endswith))
-       sort))
+  (swap! state-atom assoc kw thing)
+  (swap! state-atom assoc :files-remaining (count (:done-files @state-atom)))
+  (swap! state-atom assoc :files-done (count (:todo-files @state-atom))))
 
 ;;;; repl play and development
 
-(defn add-test-files
-  []
-  ["file1" "f2" "f333"])
+(defn add-test-files [v]
+   v)
 
-(update-state-field! next-image-state :todo-files (add-test-files))
+(update-todo-done-field! next-image-state :todo-files (add-test-files ["f1" "f2" "f3"]))
+(update-todo-done-field! next-image-state :done-files (add-test-files ["done1" "done2"]))
 
 @next-image-state
+

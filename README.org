@@ -1,0 +1,19 @@
+#+TITLE: next_image_clj
+#+DATE: 2020-03-14
+#+OPTIONS: toc:nil author:nil title:nil date:nil num:nil ^:{} \n:1 todo:nil
+#+PROPERTY: header-args :eval never-export
+#+LATEX_HEADER: \usepackage[margin=1.0in]{geometry}
+#+LATEX_HEADER: \hypersetup{colorlinks=true,citecolor=black,linkcolor=black,urlcolor=blue,linkbordercolor=blue,pdfborderstyle={/S/U/W 1}}
+#+LATEX_HEADER: \usepackage[round]{natbib}
+#+LATEX_HEADER: \renewcommand{\bibsection}
+#+ARCHIVE: daily_archive.org::datetree/* From master todo
+* next_image_clj
+A Clojure plugin for ImageJ/Fiji to make manual image analysis of large collections of images suck less.
+
+Don't use me yet, I am a work in progress. 
+* License
+
+GNU GPL v3.0 or later
+
+Copyright Nick George 2020
+
