@@ -11,6 +11,15 @@
 A Clojure plugin for ImageJ/Fiji to make manual image analysis of large collections of images suck less.
 
 Don't use me yet, I am a work in progress. 
+
+* development
+
+I use Cognitect's test runner for automated tests with =deps.edn=
+
+#+BEGIN_SRC bash :results verbatim 
+clj -A:test
+#+END_SRC
+
 * License
 
 GNU GPL v3.0 or later
