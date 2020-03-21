@@ -31,12 +31,12 @@
     [alt-msg]
          (k @state-atom)))
 
-
 (defn file-list
   []
   (seesaw/border-panel :north
                        (seesaw/scrollable
-                        (seesaw/listbox :model (update-field! next-image-state :todo-files "No images found...")))
+                        (seesaw/listbox :model ["Nothing here yet"]
+                                        :handler ))
                        :south (seesaw/label "metadata here")))
 
 (def next_image_gui
