@@ -4,9 +4,9 @@
             [seesaw.chooser :as chooser]
             [seesaw.font :as font]))
 
+
 (defn make-fake-files [prefix n]
   (into [] (for [ x (range n)] (str prefix x))))
-
 
 (def next-image-state
   "holds all state for app"
@@ -16,43 +16,38 @@
          :todo-files-count 5
          :done-files-count 3}))
 
-(defn update-selection [selected-file]
-  (swap! next-image-state :current-selected selected-file))
 
-(defn make-listbox [model-content id]
-  (seesaw/scrollable (seesaw/listbox :model model-content) :id id))
+(defn make-scrollbox [model id]
+  "Make generic scollable scrollbox."
+  (seesaw/scrollable (seesaw/listbox :model model
+                                     :id id)))
+
+(defn update-selection! [selected-file]
+  "update selected file in state atom"
+  (swap! next-image-state assoc :current-selected selected-file))
 
 (defn tabbed-top
   [frame]
-  (seesaw/config! frame :content
-                  
+  (seesaw/config! frame :content 
                   (seesaw/tabbed-panel :tabs
-                                       [{:title "todo..." :content   (seesaw/scrollable (seesaw/listbox :model (:todo-files @next-image-state)) :id "todos")}
-
-                                        {:title "done" :content (make-listbox (:done-files @next-image-state) "dones")}])))
-
-
+                                       [{:title "todo..." :content
+                                         (make-scrollbox (:todo-files @next-image-state) "todos")}
+                                        {:title "done" :content
+                                         (make-scrollbox (:done-files @next-image-state) "dones")}])))
 
 (def test-frame
   (seesaw/frame :title "base frame" :width 400 :height 400
                 :content (seesaw/label :text "testing")))
+
 (-> test-frame seesaw/show!)
 
 (tabbed-top test-frame)
 
-
 ;; this is how you add listeners based on a widget's :id
-
-#_(seesaw/listen
- (seesaw/select test-frame [:#todos])
- :selection (fn [e] (swap! next-image-state assoc :current-selected (seesaw/selection e))))
 
 (seesaw/listen
  (seesaw/select test-frame [:#todos])
- :selection (fn [e] (println "pushed")))
-
-#_(def test-scroll (seesaw/scrollable (seesaw/listbox :model (:todo-files @next-image-state)) :id "tts"))
-
+ :selection (fn [e] (update-selection! (seesaw/selection e))))
 
 
 (:current-selected @next-image-state)
