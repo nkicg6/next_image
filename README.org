@@ -7,7 +7,7 @@
 #+LATEX_HEADER: \usepackage[round]{natbib}
 #+LATEX_HEADER: \renewcommand{\bibsection}
 #+ARCHIVE: daily_archive.org::datetree/* From master todo
-* next_image_clj
+
 A Clojure plugin for ImageJ/Fiji to make manual image analysis of large collections of images suck less.
 
 Don't use me yet, I am a work in progress. 
@@ -19,6 +19,10 @@ I use Cognitect's test runner for automated tests with =deps.edn=
 #+BEGIN_SRC bash :results verbatim 
 clj -A:test
 #+END_SRC
+* dev links and resources 
+http://darevay.com/talks/clojurewest2012/#/title-slide
+https://www.infoq.com/presentations/Building-User-Interfaces-with-Seesaw/
+https://gist.github.com/daveray/1441520
 
 * License
 

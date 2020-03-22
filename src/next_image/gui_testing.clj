@@ -1,6 +1,7 @@
 ;; playing with layout of gui
 (ns next-image.gui-testing
-  (:require [seesaw.core :as seesaw]
+  (:require [seesaw.bind :as binder]
+            [seesaw.core :as seesaw]
             [seesaw.chooser :as chooser]
             [seesaw.font :as font]))
 
@@ -16,6 +17,7 @@
          :todo-files-count 5
          :done-files-count 3}))
 
+(def simple-atom (atom "test stuff"))
 
 (defn make-scrollbox [model id]
   "Make generic scollable scrollbox."
@@ -26,22 +28,30 @@
   "update selected file in state atom"
   (swap! next-image-state assoc :current-selected selected-file))
 
-(defn tabbed-top
-  [frame]
-  (seesaw/config! frame :content 
-                  (seesaw/tabbed-panel :tabs
-                                       [{:title "todo..." :content
-                                         (make-scrollbox (:todo-files @next-image-state) "todos")}
-                                        {:title "done" :content
-                                         (make-scrollbox (:done-files @next-image-state) "dones")}])))
+(defn main-view  [master-frame]
+  (seesaw/config! master-frame :content
+                  (seesaw/top-bottom-split
+                   (seesaw/tabbed-panel :tabs
+                                        [{:title "todo..." :content
+                                          (make-scrollbox (:todo-files @next-image-state) "todos")}
+                                         {:title "done" :content
+                                          (make-scrollbox (:done-files @next-image-state) "dones")}])
+                   (seesaw/border-panel :north (seesaw/left-right-split (seesaw/label :text "current image: ")
+                                                                        (seesaw/label :text @simple-atom
+                                                                                      :id "currentselection"))
+                                        :center (seesaw/label :text "metadata-here")
+                                        :south (seesaw/left-right-split
+                                                (seesaw/button :text "choose a different project")
+                                                (seesaw/button :text "Next image"))
+                                       :hgap 5 :vgap 10 :border 10))))
 
 (def test-frame
-  (seesaw/frame :title "base frame" :width 400 :height 400
+  (seesaw/frame :title "base frame" :width 400 :height 800
                 :content (seesaw/label :text "testing")))
 
 (-> test-frame seesaw/show!)
 
-(tabbed-top test-frame)
+(main-view test-frame)
 
 ;; this is how you add listeners based on a widget's :id
 
@@ -49,6 +59,7 @@
  (seesaw/select test-frame [:#todos])
  :selection (fn [e] (update-selection! (seesaw/selection e))))
 
+#_(b(seesaw/select test-frame [:#currentselection]))
 
 (:current-selected @next-image-state)
 
