@@ -1,6 +1,6 @@
 ;; playing with layout of gui
 (ns next-image.gui-testing
-  (:require [seesaw.bind :as binder]
+  (:require [seesaw.bind :as b]
             [seesaw.core :as seesaw]
             [seesaw.chooser :as chooser]
             [seesaw.font :as font]))
@@ -17,7 +17,6 @@
          :todo-files-count 5
          :done-files-count 3}))
 
-(def simple-atom (atom "test stuff"))
 
 (defn make-scrollbox [model id]
   "Make generic scollable scrollbox."
@@ -37,7 +36,7 @@
                                          {:title "done" :content
                                           (make-scrollbox (:done-files @next-image-state) "dones")}])
                    (seesaw/border-panel :north (seesaw/left-right-split (seesaw/label :text "current image: ")
-                                                                        (seesaw/label :text @simple-atom
+                                                                        (seesaw/label :text ""
                                                                                       :id "currentselection"))
                                         :center (seesaw/label :text "metadata-here")
                                         :south (seesaw/left-right-split
@@ -49,9 +48,9 @@
   (seesaw/frame :title "base frame" :width 400 :height 800
                 :content (seesaw/label :text "testing")))
 
-(-> test-frame seesaw/show!)
-
-(main-view test-frame)
+(-> test-frame
+    main-view
+    seesaw/show!)
 
 ;; this is how you add listeners based on a widget's :id
 
@@ -59,10 +58,16 @@
  (seesaw/select test-frame [:#todos])
  :selection (fn [e] (update-selection! (seesaw/selection e))))
 
-#_(b(seesaw/select test-frame [:#currentselection]))
+(seesaw/listen
+ (seesaw/select test-frame [:#todos])
+ :selection (fn [e] (seesaw/config!
+                    (seesaw/select test-frame [:#currentselection]) :text (str (seesaw/selection e)))))
+
+
 
 (:current-selected @next-image-state)
 
 @next-image-state
 
 (:todo-files @next-image-state)
+
