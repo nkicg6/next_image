@@ -27,13 +27,9 @@
   (seesaw/config! frame :content
                   
                   (seesaw/tabbed-panel :tabs
-                                       [{:title "todo..." :content
-                                         (seesaw/scrollable (seesaw/listbox :model (:todo-files @next-image-state)
-                                                                            :id "todos"))}
+                                       [{:title "todo..." :content   (seesaw/scrollable (seesaw/listbox :model (:todo-files @next-image-state)) :id "todos")}
 
-                                        {:title "done" :content
-                                         (seesaw/scrollable (seesaw/listbox :model (:done-files @next-image-state)
-                                                                            :id "dones"))}])))
+                                        {:title "done" :content (make-listbox (:done-files @next-image-state) "dones")}])))
 
 
 
@@ -47,9 +43,15 @@
 
 ;; this is how you add listeners based on a widget's :id
 
-(seesaw/listen
+#_(seesaw/listen
  (seesaw/select test-frame [:#todos])
  :selection (fn [e] (swap! next-image-state assoc :current-selected (seesaw/selection e))))
+
+(seesaw/listen
+ (seesaw/select test-frame [:#todos])
+ :selection (fn [e] (println "pushed")))
+
+#_(def test-scroll (seesaw/scrollable (seesaw/listbox :model (:todo-files @next-image-state)) :id "tts"))
 
 
 
